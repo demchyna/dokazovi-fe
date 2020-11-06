@@ -1,19 +1,17 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import './App.css';
-import { RenderRoutes } from "./navigation/Router"; 
-import { ROUTER_CONFIG } from "./navigation/routerConfig"; 
+import { RenderRoutes } from './navigation/Router';
+import ROUTER_CONFIG from './navigation/router-config';
 
-
-function App() {
-  
-  return (    
-    <div className="App">
-      <header className="App-header"> 
-      <h1>Header</h1>     
-      </header>      
-      <RenderRoutes routes={ROUTER_CONFIG}/>  
-    </div>    
+const App: React.FC = () => {
+  return (
+    <Suspense fallback={<div>Загрузка...</div>}>
+      <div className="App">
+        <header className="App-header" />
+        <RenderRoutes routes={ROUTER_CONFIG} />
+      </div>
+    </Suspense>
   );
-}
+};
 
 export default App;
