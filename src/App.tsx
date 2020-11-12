@@ -5,11 +5,13 @@ import PostPreviewCard from './lib/components/PostPreview/PostPreviewCard';
 import { RenderRoutes } from './navigation/Router';
 import ROUTER_CONFIG from './navigation/router-config';
 
+import Header from './lib/components/Header/Header';
+
 const App: React.FC = () => {
   return (
     <Suspense fallback={<div>Загрузка...</div>}>
       <div className="App">
-        <header className="App-header" />
+        <Header />
         <PostPreviewCard data={MOCK_DATA} />
         <RenderRoutes routes={ROUTER_CONFIG} />
       </div>

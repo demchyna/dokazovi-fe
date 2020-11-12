@@ -37,12 +37,15 @@ export enum PostStatus {
 }
 
 export enum PostTypeEnum {
-  DOPYS = 'DOPYS',
   STATTYA = 'STATTYA',
+  ARTICLE = 'ARTICLE',
+  DOPYS = 'DOPYS',
+  VIDEO = 'VIDEO',
 }
 
 export enum DirectionEnum {
   CARDIOLOGY = 'CARDIOLOGY',
   PEDIATRICS = 'PEDIATRICS',
   THERAPY = 'THERAPY',
+  COVID19 = 'COVID19',
 }
