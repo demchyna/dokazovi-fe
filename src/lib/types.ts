@@ -37,7 +37,6 @@ export enum PostStatus {
 }
 
 export enum PostTypeEnum {
-  STATTYA = 'STATTYA',
   ARTICLE = 'ARTICLE',
   DOPYS = 'DOPYS',
   VIDEO = 'VIDEO',

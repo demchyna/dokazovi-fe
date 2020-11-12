@@ -20,4 +20,8 @@ export const directionProperties: DirectionPropertiesType = {
     color: 'yellow',
     cyrillic: 'Терапія',
   },
+  [DirectionEnum.COVID19]: {
+    color: 'red',
+    cyrillic: 'Covid-19',
+  },
 };

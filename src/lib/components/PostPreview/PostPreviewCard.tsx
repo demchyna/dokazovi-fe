@@ -6,9 +6,9 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
-import { IPost } from '../../types';
 import { directionProperties } from './direction-properties';
 import { postTypeProperties } from './post-type-properties';
+import { IPost } from '../../types';
 
 const useStyles = makeStyles(
   (theme) =>

@@ -14,7 +14,7 @@ export const MOCK_DATA: IPost = {
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
   tags: ['therapy'],
   createdAt: new Date(),
-  postType: PostTypeEnum.STATTYA,
+  postType: PostTypeEnum.ARTICLE,
   preview:
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
 };

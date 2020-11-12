@@ -10,7 +10,10 @@ export const postTypeProperties: PostTypePropertiesType = {
   [PostTypeEnum.DOPYS]: {
     cyrillic: 'Допис',
   },
-  [PostTypeEnum.STATTYA]: {
+  [PostTypeEnum.ARTICLE]: {
     cyrillic: 'Стаття',
+  },
+  [PostTypeEnum.VIDEO]: {
+    cyrillic: 'Відео',
   },
 };
