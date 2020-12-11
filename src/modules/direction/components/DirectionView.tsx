@@ -7,12 +7,15 @@ import { useStyles } from './styles/DirectionView.styles';
 import { DIRECTION_PROPERTIES } from '../../../lib/constants/direction-properties';
 import BorderBottom from '../../../lib/components/Border';
 import { RootStateType } from '../../../store/rootReducer';
-import { fetchExperts, setupDirection, fetchCourses } from '../store/directionSlice';
+import {
+  fetchExperts,
+  setupDirection,
+  fetchCourses,
+} from '../store/directionSlice';
 import { ExpertsView } from '../../../lib/components/ExpertsView';
 import { IDirection } from '../../../lib/types';
 import Carousel from '../../../lib/components/Carousel';
 import { CourseCard } from '../../../lib/components/CourseCard';
-
 
 import MaterialsContainer from './MaterialsContainer';
 
@@ -24,7 +27,6 @@ const DirectionView: React.FC<IDirectionViewProps> = () => {
   const currentDirection = directions.find(
     (direction) => direction.route === pathname.split('/')[2],
   ) as IDirection; // TODO: validate route!
-
 
   const dispatch = useDispatch();
 
@@ -39,8 +41,10 @@ const DirectionView: React.FC<IDirectionViewProps> = () => {
   useEffect(() => {
     dispatch(fetchCourses(currentDirection.name));
   }, []);
-  
-  const courseCards = useSelector((state: RootStateType) => state.directions[currentDirection.name]?.courses);
+
+  const courseCards = useSelector(
+    (state: RootStateType) => state.directions[currentDirection.name]?.courses,
+  );
 
   const expertsCards = useSelector(
     (state: RootStateType) => state.directions[currentDirection.name]?.experts,
@@ -51,42 +55,47 @@ const DirectionView: React.FC<IDirectionViewProps> = () => {
   return (
     <>
       {currentDirection ? (
-        <Container>
-          <Grid container spacing={2} direction="row">
-            <Grid item xs={12} className={classes.header}>
-              <Box
-                color="disabled"
-                className={classes.icon}
-                style={{ backgroundColor: currentDirection?.color }}
-              />
-              <Typography variant="h2">{currentDirection?.name}</Typography>
-            </Grid>
-            <BorderBottom />
-            <Grid item xs={12}>
-              {expertsCards && <ExpertsView cards={expertsCards} />}
-              <Box className={classes.moreExperts}>
-                <Typography variant="h5" align="right" display="inline">
-                  Більше експертів
+        <>
+          {/* <TitleComponent title={`${currentDirection?.name}`} /> */}
+          <Container>
+            <Grid container spacing={2} direction="row">
+              <Grid item xs={12} className={classes.header}>
+                <Box
+                  color="disabled"
+                  className={classes.icon}
+                  style={{ backgroundColor: currentDirection?.color }}
+                />
+                <Typography variant="h2">{currentDirection?.name}</Typography>
+              </Grid>
+              <BorderBottom />
+              <Grid item xs={12}>
+                {expertsCards && <ExpertsView cards={expertsCards} />}
+                <Box className={classes.moreExperts}>
+                  <Typography variant="h5" align="right" display="inline">
+                    Більше експертів
+                  </Typography>
+                  <ArrowForwardIosIcon />
+                </Box>
+              </Grid>
+              <BorderBottom />
+              <Grid item xs={12}>
+                <MaterialsContainer direction={currentDirection} />
+              </Grid>
+              <Grid item xs={12}>
+                <Typography variant="h5" className={classes.courseTitle}>
+                  Рекомендовані курси
                 </Typography>
-                <ArrowForwardIosIcon />
-              </Box>
+                <Carousel>
+                  {courseCards.map((p) => (
+                    <div key={p.title}>
+                      <CourseCard course={p} />
+                    </div>
+                  ))}
+                </Carousel>
+              </Grid>
             </Grid>
-            <BorderBottom />
-            <Grid item xs={12}>
-              <MaterialsContainer direction={currentDirection} />
-            </Grid>
-            <Grid item xs={12}>
-            <Typography variant="h5" className={classes.courseTitle}>Рекомендовані курси</Typography>
-            <Carousel>
-                {courseCards.map((p) => (
-                  <div key={p.title}>
-                    <CourseCard course={p} />
-                  </div>
-                ))}
-              </Carousel>
-            </Grid>
-          </Grid>
-        </Container>
+          </Container>
+        </>
       ) : (
         <>
           <Typography variant="h3">Direction not found</Typography>

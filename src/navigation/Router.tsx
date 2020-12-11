@@ -1,21 +1,28 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
+import TitleComponent from '../lib/components/TitleComponent';
 import { IRouterConfig } from './types';
 
 export const RouteWithSubRoutes: React.FC<IRouterConfig> = (props) => {
-  const { routes, path, exact } = props;
+  const { routes, path, exact, title } = props;
 
   if (!routes) {
     const routeWithoutRoutes = props;
     return (
       <Route path={path} exact={exact}>
-        <routeWithoutRoutes.component />
+        <>
+          <TitleComponent title={title} />
+          <routeWithoutRoutes.component />
+        </>
       </Route>
     );
   }
   return (
     <Route path={path} exact={exact}>
-      <props.component routes={routes} />
+      <>
+        <TitleComponent title={title} />
+        <props.component routes={routes} />
+      </>
     </Route>
   );
 };
@@ -34,13 +41,30 @@ export const RenderRoutes: React.FC<{ routes?: IRouterConfig[] }> = (props) => {
               path={route.path}
               routes={route.routes}
               exact={route.exact}
+              title={route.title}
             />
           );
         })}
-        <Route component={() => <h1>Not Found!</h1>} />
+        <Route
+          component={() => (
+            <>
+              <TitleComponent title="404" />
+              <h1>Not Found!</h1>
+            </>
+          )}
+        />
       </Switch>
     );
   }
 
-  return <Route component={() => <h1>Not Found!</h1>} />;
+  return (
+    <Route
+      component={() => (
+        <>
+          <TitleComponent title="404" />
+          <h1>Not Found!</h1>
+        </>
+      )}
+    />
+  );
 };

@@ -5,5 +5,6 @@ export interface IRouterConfig {
   path: string;
   key?: string;
   exact?: boolean;
+  title?: string;
   routes?: IRouterConfig[];
 }
