@@ -19,7 +19,6 @@ import { LOAD_POSTS_LIMIT } from '../../main/components/constants/newestPostsPag
 
 import { IExpertPayload } from '../../main/store/mainSlice';
 import type { RootStateType } from '../../../store/rootReducer';
-import type { ICheckboxes } from '../../../lib/components/FilterForm';
 
 const POST_PREVIEW_LENGTH = 150;
 interface IExpertsListPayload extends IExpertPayload {
@@ -89,7 +88,7 @@ export const fetchExperts = createAsyncThunk(
     const {
       experts: { experts },
     } = getState() as RootStateType;
-    const filterValues = experts.filters?.REGIONS?.value as ICheckboxes;
+    const filterValues = experts.filters?.REGIONS?.value as Record<string, boolean>;
     const { data } = await getAllExperts({
       params: {
         page: experts.meta?.pageNumber,

@@ -12,6 +12,10 @@ export interface IPostTypeFilterProps {
   directionName: string;
 }
 
+interface IState {
+  [key: string]: boolean;
+}
+
 export const PostTypeFilter: React.FC<IPostTypeFilterProps> = ({
   directionName,
 }) => {
@@ -22,12 +26,8 @@ export const PostTypeFilter: React.FC<IPostTypeFilterProps> = ({
     (state: RootStateType) => state.properties.postTypes,
   );
 
-  interface IInitState {
-    [key: string]: boolean;
-  }
-
   const initState = () =>
-    postTypes.reduce((acc: IInitState, next: IPostType) => {
+    postTypes.reduce((acc: IState, next: IPostType) => {
       return { ...acc, [next.id.toString()]: false };
     }, {});
 

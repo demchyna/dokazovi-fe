@@ -7,7 +7,7 @@ import { RootStateType } from '../../../store/rootReducer';
 import ExpertsList from '../../../lib/components/ExpertsList';
 import LoadingInfo from '../../../lib/components/LoadingInfo';
 import { useStyles } from '../styles/ExpertsView.styles';
-import { FilterForm } from '../../../lib/components/FilterForm';
+import { RegionsFilter } from '../../../lib/components/FilterForm';
 
 export interface IExpertsViewProps {}
 
@@ -22,6 +22,10 @@ const ExpertsView: React.FC<IExpertsViewProps> = () => {
     meta: { totalPages, pageNumber, loading },
     filters,
   } = useSelector(selectExperts);
+
+  const regions = useSelector(
+    (state: RootStateType) => state.properties?.regions,
+  );
 
   const setExperts = () => dispatch(fetchExperts());
 
@@ -45,7 +49,7 @@ const ExpertsView: React.FC<IExpertsViewProps> = () => {
     <>
       <Container fixed>
         <Grid container>
-          <FilterForm />
+          {regions?.length && <RegionsFilter />}
         </Grid>
         {loading === 'pending' ? (
           <Grid container direction="column" alignItems="center">

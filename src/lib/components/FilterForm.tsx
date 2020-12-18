@@ -1,53 +1,40 @@
-import React, { useCallback } from 'react';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { Grid, Typography } from '@material-ui/core';
 import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
 import _ from 'lodash';
+import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Container, Grid, Typography } from '@material-ui/core';
+import { setExpertsRegionsFilter } from '../../modules/experts/store/expertsSlice';
 import type { RootStateType } from '../../store/rootReducer';
 import { ExpertRegionType } from '../types';
-import { setExpertsRegionsFilter } from '../../modules/experts/store/expertsSlice';
-import { useStyles } from '../../modules/experts/styles/ExpertsView.styles';
 
-export type CheckedType = {
+export interface ICheckedState {
   [key: string]: boolean;
 };
 
-export interface IInitLocalState {
-  [key: string]: boolean;
-}
+export interface IFilterFormProps { }
 
-export interface ICheckboxes {
-  [key: number]: boolean;
-}
-
-export interface IFilterFormProps {}
-
-export const FilterForm: React.FC<IFilterFormProps> = () => {
-  const classes = useStyles();
+export const RegionsFilter: React.FC<IFilterFormProps> = () => {
   const dispatch = useDispatch();
   const regions = useSelector(
     (state: RootStateType) => state.properties?.regions,
   );
-  const { filters } = useSelector(
-    (state: RootStateType) => state.experts?.experts,
-  );
 
   const initLocalState = () =>
-    regions.reduce((acc: IInitLocalState, next: ExpertRegionType) => {
-      return { ...acc, [next.id.toString()]: false };
+    regions.reduce((acc: ICheckedState, next: ExpertRegionType) => {
+      return { ...acc, [next.id.toString()]: true };
     }, {});
 
-  const [checked, setChecked] = React.useState<IInitLocalState>(initLocalState);
+  const [checked, setChecked] = React.useState<ICheckedState>(initLocalState);
+  const [allChecked, setAllChecked] = React.useState<boolean>(true);
 
-  const expertsFilters = filters?.REGIONS?.value as ICheckboxes;
 
-  const handler = useCallback(
-    _.debounce((checkedTypes: ICheckboxes) => {
+  const setFiltersToStore = useCallback(
+    _.debounce(() => {
       dispatch(
         setExpertsRegionsFilter({
-          value: checkedTypes,
+          value: checked,
         }),
       );
     }, 500),
@@ -55,23 +42,16 @@ export const FilterForm: React.FC<IFilterFormProps> = () => {
   );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const checkedTypes = {
-      ...initLocalState,
-      ...checked,
-      [event.target.id]: event.target.checked,
-    };
-
-    setChecked(checkedTypes);
-    handler(checkedTypes);
+    setChecked({ ...checked, [event.target.id]: event.target.checked });
+    setFiltersToStore();
   };
 
   const handleChangeAll = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const checkedTypes = event.target.checked
-      ? _.mapValues(checked, () => true)
-      : _.mapValues(checked, () => false);
+    const checkedTypes = _.mapValues(checked, () => event.target.checked);
 
     setChecked(checkedTypes);
-    handler(checkedTypes);
+    setAllChecked(event.target.checked);
+    setFiltersToStore();
   };
 
   return (
@@ -86,7 +66,7 @@ export const FilterForm: React.FC<IFilterFormProps> = () => {
             control={
               <Checkbox
                 id="All"
-                checked={checked.id}
+                checked={allChecked}
                 onChange={handleChangeAll}
                 name="All"
               />
@@ -102,22 +82,21 @@ export const FilterForm: React.FC<IFilterFormProps> = () => {
             display: 'flex',
             flexDirection: 'column',
             flexWrap: 'wrap',
-            // paddingLeft: '50px',
           }}
         >
-          {regions.map((type) => (
+          {regions.map((region) => (
             <FormControlLabel
               style={{ width: '100%' }}
               control={
                 <Checkbox
-                  id={type.id.toString()}
-                  checked={checked[type.id.toString()]}
+                  id={region.id.toString()}
+                  checked={checked[region.id.toString()]}
                   onChange={handleChange}
-                  name={type.name}
+                  name={region.name}
                 />
               }
-              label={type.name}
-              key={type.name}
+              label={region.name}
+              key={region.id.toString()}
             />
           ))}
         </FormGroup>{' '}
