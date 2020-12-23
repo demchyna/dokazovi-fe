@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
@@ -34,20 +34,36 @@ export const FilterForm: React.FC<IFilterFormProps> = () => {
     (state: RootStateType) => state.experts?.experts,
   );
 
-  const initLocalState = () =>
-    regions.reduce((acc: IInitLocalState, next: ExpertRegionType) => {
-      return { ...acc, [next.id.toString()]: false };
-    }, {});
+  // const initLocalState = () =>
+  //   regions.reduce((acc: IInitLocalState, next: ExpertRegionType) => {
+  //     return { ...acc, [next.id.toString()]: true };
+  //   }, {});
+
+  const initLocalState = regions.reduce(
+    (acc: IInitLocalState, next: ExpertRegionType) => {
+      return { ...acc, [next.id.toString()]: true };
+    },
+    {},
+  );
 
   const [checked, setChecked] = React.useState<IInitLocalState>(initLocalState);
+  const [allChecked, setAllChecked] = React.useState<boolean>(true);
 
-  const expertsFilters = filters?.REGIONS?.value as ICheckboxes;
+  useEffect(() => {
+    if (!checked) {
+      setChecked(initLocalState);
+    }
+  });
+
+  console.log('rendering... checked: ', checked);
+  console.log('rendering... regions: ', regions);
+  console.log('rendering... initLocalState: ', initLocalState);
 
   const handler = useCallback(
-    _.debounce((checkedTypes: ICheckboxes) => {
+    _.debounce(() => {
       dispatch(
         setExpertsRegionsFilter({
-          value: checkedTypes,
+          value: checked,
         }),
       );
     }, 500),
@@ -56,13 +72,12 @@ export const FilterForm: React.FC<IFilterFormProps> = () => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const checkedTypes = {
-      ...initLocalState,
       ...checked,
       [event.target.id]: event.target.checked,
     };
 
     setChecked(checkedTypes);
-    handler(checkedTypes);
+    handler();
   };
 
   const handleChangeAll = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,8 +85,10 @@ export const FilterForm: React.FC<IFilterFormProps> = () => {
       ? _.mapValues(checked, () => true)
       : _.mapValues(checked, () => false);
 
+    console.log('handleChangeAll', checkedTypes);
     setChecked(checkedTypes);
-    handler(checkedTypes);
+    setAllChecked(event.target.checked);
+    handler();
   };
 
   return (
@@ -86,7 +103,7 @@ export const FilterForm: React.FC<IFilterFormProps> = () => {
             control={
               <Checkbox
                 id="All"
-                checked={checked.id}
+                checked={allChecked}
                 onChange={handleChangeAll}
                 name="All"
               />
@@ -102,7 +119,6 @@ export const FilterForm: React.FC<IFilterFormProps> = () => {
             display: 'flex',
             flexDirection: 'column',
             flexWrap: 'wrap',
-            // paddingLeft: '50px',
           }}
         >
           {regions.map((type) => (
